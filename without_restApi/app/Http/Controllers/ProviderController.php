@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use JWTAuth;
 use Socialite;
 use App\Provider;
 use App\User;
@@ -52,6 +53,6 @@ class ProviderController extends Controller
             $user = $socialProvider->user;
 
         $token = JWTAuth::fromUser($user);
-        return Response::json(['data' => compact('token')]);
+        return response()->json(['data' => compact('token')]);
     }  
 }
