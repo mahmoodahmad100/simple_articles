@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Mail // should'nt be used here;
 use App\Http\Requests\ArticleRequest;
 use App\Article;
 
@@ -45,7 +46,13 @@ class ArticleController extends Controller
      */
     public function store(ArticleRequest $request, Article $article)
     {
-        return $article->create($request->all());
+        $article->create($request->all());
+        // for sure this way is not good at all.
+        // it's much better to use events 
+        // but this is just a simple example
+        // and in real world apps this is not accepted
+        // Mail::to("admin email")->send("new article");
+        return $article;
     }
 
     /**

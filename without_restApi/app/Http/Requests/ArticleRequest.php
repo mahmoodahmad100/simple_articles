@@ -24,6 +24,7 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
+            'subcategory' => 'numeric',
             'image' => 'required|image',
             'title' => 'required|min:3',
             'description' => 'required|min:10'
