@@ -26,4 +26,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * The social providers (facebook, twitter ...etc).
+     */    
+    public function providers()
+    {
+        return $this->hasMany('App\Provider');
+    }
+
 }
