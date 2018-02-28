@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ArticleRequest;
 use App\Article;
-use Session;
 
 class ArticleController extends Controller
 {
@@ -15,7 +14,7 @@ class ArticleController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('jwt.auth', ['except' => ['index', 'show']]);
     }
 
     /**
@@ -25,8 +24,7 @@ class ArticleController extends Controller
      */
     public function index(Article $articles)
     {
-        $articles = $articles->all();
-        return view('articles/index',compact('articles'));
+        return $articles->all();
     }
 
     /**
@@ -34,10 +32,10 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('articles/create');
-    }
+    // public function create()
+    // {
+    //     return view('articles/create');
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -45,23 +43,20 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ArticleRequest $request)
+    public function store(ArticleRequest $request, Article $article)
     {
-        Article::create($request->all());
-        Session::flash('success_msg','you added new article');   
-        return redirect()->route('articles.index');
+        return $article->create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  object  $article
+     * @param  integer  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Article $article)
+    public function show($id)
     {
-        $article = $article;
-        return view('articles/show', compact('article'));
+        return $article = Article::find($id);
     }
 
     /**
@@ -70,11 +65,11 @@ class ArticleController extends Controller
      * @param  object  $article
      * @return \Illuminate\Http\Response
      */
-    public function edit(Article $article)
-    {
-        $article = $article;
-        return view('articles/edit', compact('article'));
-    }
+    // public function edit(Article $article)
+    // {
+    //     $article = $article;
+    //     return view('articles/edit', compact('article'));
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -85,9 +80,7 @@ class ArticleController extends Controller
      */
     public function update(ArticleRequest $request, Article $article)
     {
-        $article->update($request->all());
-        Session::flash('success_msg','you updated the article');   
-        return redirect()->route('articles.index');
+       return $article->update($request->all());
     }
 
     /**
@@ -98,8 +91,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        $article->delete();
-        Session::flash('success_msg','you deleted the article');   
-        return redirect()->route('articles.index');
+        $article->delete(); 
+        return 200;
     }
 }

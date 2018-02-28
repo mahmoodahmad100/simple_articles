@@ -18,11 +18,11 @@ class UserController extends Controller
           'email' => 'required|email',
           'password' => 'required'
       ]);
-      if(Auth::attempt(['email' => $request['email'], 'password' => $request['password']])){
-        return redirect()->route('articles.index');
+
+      if( ! $token = JWTAuth::attempt(['email' => $request['email'], 'password' => $request['password']])) {
+        return Response::json(['error' => 'please login with the correct data'], HttpResponse::HTTP_UNAUTHORIZED);
       }
-      else {
-        return redirect()->back()->with('error_msg','checkout your email or your password is correct');
-      }
+
+      return Response::json(['data' => compact('token')]);
     }
 }
